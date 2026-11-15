@@ -430,9 +430,44 @@ button.sigchip{min-height:36px}
 .synth-progress{height:3px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
 .synth-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--violet))}
 /* horizontal pinned mode (desktop only, set by JS) */
-.synth-h .synth-viewport{overflow:hidden;border-radius:var(--r-md)}
-.synth-h .synth-track{display:flex;width:max-content;gap:var(--s3);will-change:transform}
-.synth-h .stage{width:min(560px,40vw);height:calc(100svh - var(--nav-h) - 190px);overflow:auto;overscroll-behavior:contain}
+/* Desktop stepper for the method (mobile keeps the vertical stack) */
+.stage-nav,.stage-foot{display:none}
+@media (min-width:1024px){
+  .stage-nav{display:block;margin-bottom:16px}
+  .stage-nav ol{list-style:none;margin:0;padding:6px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;border-radius:20px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);position:relative}
+  .stage-tab{width:100%;display:grid;grid-template-columns:34px minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;align-items:center;text-align:left;padding:10px 12px;border-radius:14px;border:1px solid transparent;color:var(--text-mid);transition:background var(--dur-fast),border-color var(--dur-fast),color var(--dur-fast);min-height:60px}
+  .stage-tab:hover{background:rgba(255,255,255,.05);color:var(--text-hi)}
+  .stage-tab .sn{grid-row:1/3;display:grid;place-items:center;width:34px;height:34px;border-radius:11px;font-family:var(--font-mono);font-weight:600;font-size:.85rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)}
+  .stage-tab .sname{font-weight:700;font-size:.92rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stage-tab .sstat{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.06em;color:var(--text-lo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stage-tab.is-done .sn{background:rgba(52,211,153,.14);border-color:rgba(52,211,153,.45);color:#6ee7b7}
+  .stage-tab[aria-current="step"]{background:linear-gradient(135deg,rgba(47,123,255,.22),rgba(139,92,246,.2));border-color:rgba(139,92,246,.55);color:var(--text-hi)}
+  .stage-tab[aria-current="step"] .sn{background:linear-gradient(135deg,var(--blue),var(--violet));border-color:transparent;color:#fff}
+  .stage-nav .snav-hint{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font-size:.8rem;color:var(--text-lo)}
+  .stage-nav kbd{font-family:var(--font-mono);font-size:.7rem;padding:1px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.2);color:var(--text-mid)}
+  .synth-track .stage{display:none}
+  .synth-track .stage.is-current{display:grid;grid-template-columns:minmax(0,1fr) 270px;grid-template-areas:"head head" "meta meta" "body side" "foot foot";column-gap:24px;row-gap:14px;padding:28px;min-height:520px}
+  .stage.is-current .stage-head{grid-area:head}
+  .stage.is-current .meta-row{grid-area:meta}
+  .stage.is-current .stage-body{grid-area:body;min-width:0}
+  .stage.is-current .ai-hand{grid-area:side;align-self:start;grid-template-columns:1fr;position:sticky;top:calc(var(--nav-h) + 20px)}
+  .stage.is-current .ai-hand div+div{border-left:0;border-top:1px solid rgba(255,255,255,.08)}
+  .stage.is-current .stage-head h3{font-size:1.7rem}
+  .stage-foot{grid-area:foot;display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)}
+  .stage-foot .sf-count{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;color:var(--text-lo);text-transform:uppercase}
+  .stage-foot .btn[disabled]{opacity:.35;pointer-events:none}
+  #sb-capture .capture-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  #sb-capture .capture-row{margin:0}
+  #sb-capture .capture-row .tmpl{grid-template-columns:1fr 1fr}
+  #sb-imagine .imagine-grid,#sb-challenge .challenge-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;align-items:start}
+  #sb-prioritise .flow-out{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .synth-layout{grid-template-columns:minmax(0,1fr)}
+  .state-panel{position:static;order:-1;display:grid;grid-template-columns:auto repeat(5,minmax(0,1fr));align-items:center;gap:6px 18px;padding:12px 20px;border-radius:18px}
+  .state-panel .row{justify-content:flex-start;gap:10px;font-size:.84rem}
+  .state-panel .row b{font-size:1.15rem}
+  .state-panel .mono-title{margin-right:6px}
+  .state-panel .synth-progress{grid-column:1/-1}
+}
 @media (max-width:1023px){
   .synth-layout{grid-template-columns:1fr}
   .state-panel{position:sticky;top:calc(var(--nav-h) + 6px);z-index:5;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;padding:10px;order:-1;background:rgba(13,15,23,.9)}
@@ -693,8 +728,8 @@ a.btn{text-decoration:none;color:inherit}
   .section{padding:24px 0}
   .hero{min-height:auto;padding:24px 0}
   .reveal{opacity:1!important;transform:none!important}
-  .synth-h .synth-track{display:grid!important;width:auto!important;transform:none!important}
-  .synth-h .stage{width:auto!important;height:auto!important}
+  .synth-track .stage{display:flex!important}
+  .stage-nav,.stage-foot{display:none!important}
   a{color:#111}
   body.print-brief>*:not(.modal-root){display:none!important}
   body.print-brief .modal-root{position:static;display:block}
@@ -2134,7 +2169,10 @@ const Synthesis = (() => {
       <div class="stage-head"><span class="stage-num" aria-hidden="true">${stg.n}</span><h3 id="sh-${stg.id}"><span class="sr-only">Stage ${stg.n}: </span>${esc(stg.name.toUpperCase())}</h3></div>
       <div class="meta-row">${tip}${builtOn(stg.id, stg.builtOn)}</div>
       <div class="ai-hand"><div><b>What AI would do here</b>${esc(stg.ai)}</div><div><b>What we did by hand in this prototype</b>${esc(stg.hand)}</div></div>
-      <div class="stage-body" id="sb-${stg.id}"></div></article>`;
+      <div class="stage-body" id="sb-${stg.id}"></div>
+      <div class="stage-foot"><button type="button" class="btn btn-sm" data-stage-go="${stg.n - 2}" ${stg.n === 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-left-long" aria-hidden="true"></i> ${stg.n > 1 ? 'Back: ' + esc(DATA.stages[stg.n - 2].name) : 'Back'}</button>
+        <span class="sf-count">Stage ${stg.n} of ${DATA.stages.length}</span>
+        ${stg.n < DATA.stages.length ? `<button type="button" class="btn btn-sm btn-primary" data-stage-go="${stg.n}">Next: ${esc(DATA.stages[stg.n].name)} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>` : `<a class="btn btn-sm btn-primary" href="#workbench">See the full ranking <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>`}</div></article>`;
   }
   const emptyHTML = (msg) => `<p class="stage-wait"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>${esc(msg)}</p>`;
   function banner(st) {
@@ -2144,8 +2182,8 @@ const Synthesis = (() => {
   function capture(st) {
     const el = $('#sb-capture'); const act = DATA.signals.filter((s) => st.activeSignalIds.includes(s.id));
     if (!act.length) { el.innerHTML = emptyHTML('Waiting for signals. Each one gets stamped with the same four-part template.'); return; }
-    el.innerHTML = act.map((s) => `<div class="capture-row${prevActive.includes(s.id) || isReduced() ? '' : ' stamp'}" data-domain="${s.domain}"><span class="dot" aria-hidden="true"></span><div><strong>${s.id} · ${esc(s.title)}</strong>
-      <div class="tmpl"><span><b>We notice</b>${esc(s.title)}</span><span><b>It means</b>${esc(s.insight)}</span><span><b>We discuss</b>${esc(s.discussionQuestion)}</span><span><b>How sure</b>${dots(s.ratings.confidence, 5, 'Confidence')}</span></div></div></div>`).join('');
+    el.innerHTML = '<div class="capture-list">' + act.map((s) => `<div class="capture-row${prevActive.includes(s.id) || isReduced() ? '' : ' stamp'}" data-domain="${s.domain}"><span class="dot" aria-hidden="true"></span><div><strong>${s.id} · ${esc(s.title)}</strong>
+      <div class="tmpl"><span><b>We notice</b>${esc(s.title)}</span><span><b>It means</b>${esc(s.insight)}</span><span><b>We discuss</b>${esc(s.discussionQuestion)}</span><span><b>How sure</b>${dots(s.ratings.confidence, 5, 'Confidence')}</span></div></div></div>`).join('') + '</div>';
   }
   function group(st) {
     const el = $('#sb-group');
@@ -2173,25 +2211,25 @@ const Synthesis = (() => {
     const el = $('#sb-imagine'); const L = LENS[st.lens];
     const ranked = rankOptions(st).filter((r) => r.rounded !== null);
     const nud = Object.keys(L.nudges);
-    el.innerHTML = `<div class="seg" role="radiogroup" aria-label="What if… future">${DATA.lenses.map((l) => `<button type="button" role="radio" data-lens="${l.id}" aria-checked="${st.lens === l.id}">${l.id} · ${esc(l.name)}</button>`).join('')}</div>
+    el.innerHTML = `<div class="imagine-grid"><div><div class="seg" role="radiogroup" aria-label="What if… future">${DATA.lenses.map((l) => `<button type="button" role="radio" data-lens="${l.id}" aria-checked="${st.lens === l.id}">${l.id} · ${esc(l.name)}</button>`).join('')}</div>
       <div class="lens-story" style="margin-top:10px"><strong>What if: ${esc(L.name)}</strong> ${badge('ILLUSTRATIVE')}<p style="margin:6px 0 0">${esc(L.plainNarrative)}</p>
         <div class="nudges">${nud.length ? nud.map((id) => `<span class="nudge ${L.nudges[id] > 0 ? 'up' : 'down'}">${id} Impact ${L.nudges[id] > 0 ? '+1' : '−1'}</span>`).join('') : '<span class="nudge">No change to any signal</span>'}</div>
-        <span class="mono" style="display:block;margin-top:10px">${term('flex', 'Signs to watch')}</span><ul>${L.watch.map((w) => `<li>${esc(w)}</li>`).join('')}</ul></div>
+        <span class="mono" style="display:block;margin-top:10px">${term('flex', 'Signs to watch')}</span><ul>${L.watch.map((w) => `<li>${esc(w)}</li>`).join('')}</ul></div></div><div>
       <span class="mono" style="display:block;margin:12px 0 6px">Ranking in this future</span>
       ${ranked.length ? `<ol class="mini-rank">${ranked.map((r) => `<li><span class="mono">${r.id}</span><span class="bar"><i style="width:${r.rounded}%"></i></span><span class="mono">${r.rounded}</span></li>`).join('')}</ol>` : '<p class="small muted">Add signals to see the ranking.</p>'}
-      <p class="footnote">Futures are possibilities, not forecasts. A future only nudges Impact by one point, kept between 1 and 5.</p>`;
+      <p class="footnote">Futures are possibilities, not forecasts. A future only nudges Impact by one point, kept between 1 and 5.</p></div></div>`;
   }
   function challenge(st) {
     const el = $('#sb-challenge'); const act = DATA.assumptions.filter((a) => a.linkedSignals.some((id) => st.activeSignalIds.includes(id)));
     const ranked = rankOptions(st); const hl = st.highlightOption || (ranked[0] && ranked[0].rounded !== null ? ranked[0].id : 'O1'); const o = OPT[hl];
-    el.innerHTML = `<span class="mono">(a) Assumption log · active signals only</span>
+    el.innerHTML = `<div class="challenge-grid"><div><span class="mono">(a) Assumption log · active signals only</span>
       <div style="display:grid;gap:8px;margin:8px 0 16px">${act.length ? act.map((a) => assumptionHTML(a, true)).join('') : '<p class="small muted" style="margin:0">Assumptions appear when their signal is active.</p>'}</div>
-      <span class="mono">(b) Who should be in the room?</span>
+      </div><div><span class="mono">(b) Who should be in the room?</span>
       <div class="lookup-row" style="margin:8px 0"><label for="roomSelect" class="small">Option</label><select id="roomSelect" class="chip" style="min-height:44px;background:rgba(13,15,23,.9)">${DATA.options.map((x) => `<option value="${x.id}" ${x.id === hl ? 'selected' : ''}>${x.id} · ${esc(x.short)}</option>`).join('')}</select></div>
       <div class="div-chips" aria-label="Divisions in the room for ${o.id}">${DATA.divisions.map((d) => `<span class="div-chip${o.divisionsInTheRoom.includes(d.id) ? ' is-on' : ''}">${esc(d.name)}</span>`).join('')}</div>
       <p class="small" style="margin:8px 0"><span class="gen-tag">${esc(o.sharedOrLocal)}</span></p>
       <div class="governance" aria-label="Governance"><span>AI proposes</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i><span>Product managers challenge</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i><span>Divisions decide</span></div>
-      <p class="footnote">AI gives structured input for discussion; people make the decisions.</p>`;
+      <p class="footnote">AI gives structured input for discussion; people make the decisions.</p></div></div>`;
   }
   function prioritise(st) {
     const el = $('#sb-prioritise'); const ranked = rankOptions(st).filter((r) => r.rounded !== null);
@@ -2207,8 +2245,31 @@ const Synthesis = (() => {
       <div class="row"><span>Futures viewed</span><b>${c.futures}</b></div><div class="row"><span>Options</span><b>${c.options}</b></div><div class="row"><span>Priorities placed</span><b>${c.priorities}</b></div>
       <div class="synth-progress" aria-hidden="true"><i id="synthProg"></i></div>`;
   }
+  /* ---- Desktop stepper: one stage at a time, no scroll hijacking ---- */
+  let cur = 0;
+  function navStatus(st) {
+    const c = counts(st); const open = DATA.assumptions.filter((a) => a.linkedSignals.some((id) => st.activeSignalIds.includes(id))).length;
+    return [`${c.signals} signal${c.signals === 1 ? '' : 's'} captured`, `${c.themes} theme${c.themes === 1 ? '' : 's'}`, `Future ${st.lens} · ${LENS[st.lens].name}`, `${open} assumption${open === 1 ? '' : 's'}`, `${c.options} option${c.options === 1 ? '' : 's'} scored`];
+  }
+  function renderNav(st) {
+    const nav = $('#stageNav'); if (!nav) return; const stat = navStatus(st);
+    nav.innerHTML = `<ol>${DATA.stages.map((s, i) => `<li><button type="button" class="stage-tab${i < cur ? ' is-done' : ''}" data-stage-go="${i}" ${i === cur ? 'aria-current="step"' : ''} aria-controls="stage-${s.id}"><span class="sn">${i < cur ? '✓' : s.n}</span><span class="sname">${esc(s.name)}</span><span class="sstat">${esc(stat[i])}</span></button></li>`).join('')}</ol>
+      <div class="snav-hint"><span>Work through the five stages in order, or jump to any of them.</span><span><kbd>←</kbd> <kbd>→</kbd> to move between stages</span></div>`;
+  }
+  function setStage(i, opts) {
+    i = clamp(i, 0, DATA.stages.length - 1); const prev = cur; cur = i;
+    DATA.stages.forEach((s, k) => { const el = $(`#stage-${s.id}`); if (el) el.classList.toggle('is-current', k === i); });
+    renderNav(State.get());
+    const p = DATA.stages.length > 1 ? i / (DATA.stages.length - 1) : 1; const bar = $('#synthProg'); if (bar) bar.style.width = `${Math.round(p * 100)}%`; Minimap.synthProgress(p);
+    const el = $(`#stage-${DATA.stages[i].id}`);
+    if (desktopMQ.matches && el && prev !== i && !isReduced()) el.animate([{ opacity: 0, transform: `translateX(${i > prev ? 24 : -24}px)` }, { opacity: 1, transform: 'none' }], { duration: 380, easing: EASE });
+    if (DATA.stages[i].id === 'group') requestAnimationFrame(drawBridges);
+    if (opts && opts.focus) { const t = $(`[data-stage-go="${i}"].stage-tab`); if (t) t.focus({ preventScroll: true }); }
+    if (prev !== i) refreshLayout();
+  }
   function renderAll(st, ch) {
     const all = !ch; const has = (k) => all || ch.includes(k);
+    if (has('activeSignalIds') || has('lens') || has('challenged') || has('weights')) renderNav(st);
     if (has('activeSignalIds')) { capture(st); group(st); banner(st); }
     if (has('activeSignalIds') || has('lens') || has('weights')) imagine(st);
     if (has('activeSignalIds') || has('challenged') || has('highlightOption') || has('weights') || has('lens')) challenge(st);
@@ -2216,19 +2277,34 @@ const Synthesis = (() => {
     if (has('activeSignalIds') || has('lensesViewed')) statePanel(st);
     prevActive = st.activeSignalIds.slice();
   }
-  function scrollToStage(id) { const el = $(`#stage-${id}`); if (!el) return; const y = Motion.stageScrollY(el); if (y !== null) smoothScrollTo(y); else scrollToEl(el); }
+  function scrollToStage(id) {
+    const el = $(`#stage-${id}`); if (!el) return;
+    if (desktopMQ.matches) { setStage(DATA.stages.findIndex((s) => s.id === id)); scrollToEl($('#synthPin'), 76); } else scrollToEl(el);
+  }
   function setLens(id) { const st = State.get(); const viewed = st.lensesViewed.includes(id) ? st.lensesViewed : st.lensesViewed.concat(id); State.set({ lens: id, lensesViewed: viewed }); }
   function init() {
     $('#synthTrack').innerHTML = DATA.stages.map(shell).join('');
+    $('#synthViewport').insertAdjacentHTML('afterbegin', '<nav class="stage-nav" id="stageNav" aria-label="Method stages"></nav>');
     const R = DATA.alignmentRail;
     $('#alignRail').innerHTML = `<span class="mono">${esc(R.title)} <span style="text-transform:none;letter-spacing:0">(${esc(R.note.toLowerCase())})</span></span><div class="rail-steps">${R.steps.map((s, i) => `${i ? '<i class="fa-solid fa-arrow-right" aria-hidden="true" style="color:var(--text-lo)"></i>' : ''}<span class="step">${esc(s)}</span>`).join('')}</div>${badge('PUBLIC', R.source)}`;
-    renderAll(State.get());
+    renderAll(State.get()); setStage(0);
     State.subscribe((st, ch) => renderAll(st, ch));
     $('#synthTrack').addEventListener('click', (e) => { const l = e.target.closest('[data-lens]'); if (l) setLens(l.dataset.lens); });
+    $('#synthViewport').addEventListener('click', (e) => {
+      const g = e.target.closest('[data-stage-go]'); if (!g) return; const fromFoot = !!g.closest('.stage-foot'); setStage(+g.dataset.stageGo, { focus: fromFoot });
+      if (fromFoot) { const nav = $('#stageNav'); if (nav && nav.getBoundingClientRect().top < 64) scrollToEl($('#synthPin'), 76); }
+    });
+    $('#synthViewport').addEventListener('keydown', (e) => {
+      if (!desktopMQ.matches || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+      if (e.target.closest('input,select,textarea,.seg')) return;
+      if (!e.target.closest('.stage-tab,.stage-foot')) return;
+      e.preventDefault(); setStage(cur + (e.key === 'ArrowRight' ? 1 : -1), { focus: true });
+    });
+    desktopMQ.addEventListener && desktopMQ.addEventListener('change', () => { setStage(cur); drawBridges(); });
     $('#synthTrack').addEventListener('change', (e) => { if (e.target.id === 'roomSelect') State.set({ highlightOption: e.target.value }); });
     window.addEventListener('resize', debounce(drawBridges, 150));
   }
-  return { init, scrollToStage, setLens, redrawBridges: () => requestAnimationFrame(drawBridges), setProgress: (p) => { const el = $('#synthProg'); if (el) el.style.width = `${Math.round(p * 100)}%`; Minimap.synthProgress(p); } };
+  return { init, scrollToStage, setLens, setStage, redrawBridges: () => requestAnimationFrame(drawBridges) };
 })();
 
 /* ==== MODULES: Scoring (weights + ranking workbench) ==== */
@@ -2653,7 +2729,6 @@ const Tour = (() => {
 
 /* ==== MODULES: Motion (GSAP ScrollTrigger + reveal) ==== */
 const Motion = (() => {
-  let synthST = null;
   function reveals() {
     const els = $$('.reveal'); if (!('IntersectionObserver' in window)) return;
     document.documentElement.classList.add('js-anim');
@@ -2674,14 +2749,8 @@ const Motion = (() => {
       gsap.registerPlugin(ST);
       const mm = gsap.matchMedia();
       mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
-        const pin = $('#synthPin'), track = $('#synthTrack'), vp = $('#synthViewport');
-        pin.classList.add('synth-h');
-        const dist = () => Math.max(0, track.scrollWidth - vp.clientWidth);
-        const tw = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: pin, start: 'top top+=72', end: () => `+=${Math.max(1, dist())}`, pin: true, scrub: 0.6, invalidateOnRefresh: true, onUpdate: (self) => Synthesis.setProgress(self.progress) } });
-        synthST = tw.scrollTrigger;
         const rl = gsap.fromTo('#roadLine', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '#roadmapStage', start: 'top top+=110', end: '+=520', pin: true, scrub: 0.5, onUpdate: (self) => Roadmap.light(self.progress) } });
-        Synthesis.redrawBridges();
-        return () => { synthST = null; pin.classList.remove('synth-h'); gsap.set(track, { clearProps: 'transform' }); Roadmap.light(1); Synthesis.redrawBridges(); if (rl && rl.scrollTrigger) rl.scrollTrigger.kill(); };
+        return () => { Roadmap.light(1); if (rl && rl.scrollTrigger) rl.scrollTrigger.kill(); };
       });
       mm.add('(max-width: 1023px), (prefers-reduced-motion: reduce)', () => { Roadmap.light(1); });
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ST.refresh());
@@ -2689,13 +2758,7 @@ const Motion = (() => {
       window.addEventListener('load', () => ST.refresh());
     }, 'gsap');
   }
-  /** Where to scroll so that a stage is in view while the funnel is pinned. */
-  function stageScrollY(el) {
-    if (!synthST) return null; const track = $('#synthTrack'), vp = $('#synthViewport');
-    const dist = Math.max(1, track.scrollWidth - vp.clientWidth); const frac = clamp((el.offsetLeft - track.offsetLeft) / dist, 0, 1);
-    return synthST.start + (synthST.end - synthST.start) * frac;
-  }
-  return { reveals, scroll, stageScrollY };
+  return { reveals, scroll };
 })();
 
 /* ==== SELF TEST (GPFC.selfTest(), auto-run with ?dev=1) ==== */

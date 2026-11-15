@@ -20,6 +20,7 @@ SIGNAL → INSIGHT → DISCUSSION → OPTION → PRIORITY (Gen 1 / Gen 2 / Gen 3
 ```
 .
 ├── index.html      # The canvas: one self-contained page (inline CSS and JS)
+├── .github/workflows/pages.yml  # Publishes index.html to GitHub Pages on push to main
 ├── CHANGELOG.md    # One entry per tagged version
 ├── README.md
 ├── LICENSE         # MIT
@@ -33,6 +34,13 @@ Open `index.html` in a current browser (Chrome, Safari, Firefox or Edge). No bui
 - Fonts and the chart and animation libraries load from pinned CDNs (Google Fonts, cdnjs).
   Without internet the page still works: charts fall back to readable data tables.
 - Add `?dev=1` to the address to run the built-in self-test (results print in the browser console).
+
+## Live site (GitHub Pages)
+
+Every push to `main` publishes `index.html` through GitHub Actions to:
+https://akashbm6.github.io/ASSA_ABLOY_Master_Thesis/
+
+One-time setup: in the repo, go to **Settings → Pages → Build and deployment** and set **Source** to **GitHub Actions**.
 
 ## Editing content
 
